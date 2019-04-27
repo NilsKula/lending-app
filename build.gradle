@@ -1,0 +1,36 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.0.M2'
+	id 'java'
+	id 'checkstyle'
+	id 'com.github.spotbugs' version '1.7.1'
+}
+
+apply plugin: 'io.spring.dependency-management'
+
+group = 'io.codelex'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+repositories {
+	mavenCentral()
+	maven { url 'https://repo.spring.io/snapshot' }
+	maven { url 'https://repo.spring.io/milestone' }
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+checkstyle {
+	toolVersion = '8.19'
+	maxWarnings = 0
+}
+
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+	reports {
+		xml.enabled = false
+		html.enabled = true
+	}
+}
+

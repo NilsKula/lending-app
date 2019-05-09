@@ -9,7 +9,7 @@ apply plugin: 'io.spring.dependency-management'
 
 group = 'io.codelex'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '11'
 
 repositories {
 	mavenCentral()
@@ -17,9 +17,28 @@ repositories {
 	maven { url 'https://repo.spring.io/milestone' }
 }
 
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
 dependencies {
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.liquibase:liquibase-core:3.6.3'
+	implementation 'org.postgresql:postgresql:42.2.5'
+	implementation 'com.google.code.gson:gson'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.testcontainers:postgresql:1.10.6'
+	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.0'
+	testImplementation 'org.junit.platform:junit-platform-commons:1.4.0'
+	testImplementation 'org.testcontainers:junit-jupiter:1.10.6'
+	testImplementation 'org.springframework.security:spring-security-test'
+	runtime 'com.h2database:h2:1.4.199'
 }
 
 checkstyle {

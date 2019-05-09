@@ -1,0 +1,12 @@
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+pool:
+  vmImage: 'Ubuntu-16.04'
+
+steps:
+  - script: |
+      docker build -t lending-app:latest .
+      docker run --rm -u root lending-app:latest build
+      docker run --rm -u root lending-app:latest build -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock
+    displayName: 'Build'

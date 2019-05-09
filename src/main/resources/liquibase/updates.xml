@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+    
+    <changeSet id="create lending app tables" author="nils">
+        <createSequence sequenceName="client_seq"/>
+        <createSequence sequenceName="extension_seq"/>
+        <createSequence sequenceName="loan_seq"/>
+        <createTable tableName="clients">
+            <column name="id" type="bigint" defaultValueSequenceNext="client_seq">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_clients"/>
+            </column>
+            <column name="email" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex tableName="clients"
+                     indexName="idx_clients_email"
+                     unique="true">
+            <column name="email"/>
+        </createIndex>
+        
+        <createTable tableName="loans">
+            <column name="loan_id" type="varchar(255)" defaultValueSequenceNext="loan_seq">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_loan"/>
+            </column>
+            <column name="loan_status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="TIMESTAMP without timezone">
+                <constraints nullable="false"/>
+            </column>
+            <column name="due_date" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="initial_request_days" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="principal" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interest" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="total" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ip" type="varchar(255)">
+            </column>
+            <column name="client_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint baseTableName="loans" 
+                                 baseColumnNames="client_id" 
+                                 constraintName="fk_loans_clientId_clients_id"
+                                 referencedTableName="clients"
+                                 referencedColumnNames="id"/>
+        
+        <createTable tableName="extensions">
+            <column name="id" type="bigint" defaultValueSequenceNext="extension_seq">
+                <constraints primaryKey="true" nullable="false" primaryKeyName="pk_extensions"/>
+            </column>
+            <column name="loan_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="days" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="interest" type="NUMERIC">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint baseTableName="extensions"
+                                 baseColumnNames="loan_id"
+                                 constraintName="fk_extensions_loanId_loans_loanId"
+                                 referencedTableName="loans"
+                                 referencedColumnNames="loan_id"/>
+        
+    </changeSet>
+    
+</databaseChangeLog>
